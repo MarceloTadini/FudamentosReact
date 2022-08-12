@@ -1,31 +1,43 @@
 import style from './Post.module.css'
+import { format, formatDistanceToNow } from 'date-fns'
+import ptBR from 'date-fns/esm/locale/pt-BR'
 
 import {Comment} from './Comment'
 import { Avatar } from './Avatar'
+import is from 'date-fns/esm/locale/is/index.js'
 
-export function Post(){
+export function Post({ author, publishedAt, content}){
+
+    const publishedDateFormat = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
+        locale: ptBR,
+    })
+
+    const publisheDateRelativeToNow = formatDistanceToNow(publishedAt, {
+        locale: ptBR,
+        addSuffix: true
+    })
+
     return(
         <article className={style.post}>
             <header>
                 <div className={style.author}>
-                    <Avatar src="https://github.com/MarceloTadini.png"/>
+                    <Avatar src={author.avatarUrl}/>
                     <div className={style.authorInfo}>
-                        <strong>Marcelo Tadini</strong>
-                        <span>Web Developer</span>
+                        <strong>{author.name}</strong>
+                        <span>{author.role}</span>
                     </div>
                 </div>
-                <time title="Publicado 10 de agosto as 11:56" dateTime='2022/08/10 11:56'>Publicado há 1h</time>
+                <time title={publishedDateFormat} dateTime={publishedAt.toISOString()}>{publisheDateRelativeToNow}</time>
             </header>
 
             <div className={style.content}>
-                <p>Fala Galera</p>
-                <p>Acabei de subir mais um projeto no meu portifólio! É um projeto que fiz no Ignite, da Rocketseaat, porém com a trilha atualizada de 2022!</p>
-                <p> <a href="#">github.com/MarceloTadini/Ignite</a></p>
-                <p> 
-                    <a href="">#novoProjeto</a>{' '}
-                    <a href="">#ignite</a>{' '}
-                    <a href="">#rocketseat</a>
-                </p>
+                {content.map(line =>{
+                    if(line.type === 'paragraph'){
+                        return <p>{line.content}</p>
+                    } else if (line.type === 'link'){
+                        return <p><a href="">{line.content}</a></p>
+                    }
+                })}
             </div>
 
             <form className={style.commentForm}>
