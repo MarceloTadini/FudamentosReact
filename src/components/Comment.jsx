@@ -8,8 +8,7 @@ export function Comment({content, onDeleteComment}){
     const [counter, setCounter] = useState(0);
 
     function handleLikeComment(){
-        setCounter(counter + 1);
-        console.log(counter)
+        setCounter(counter+1);
     }
 
     function handleDeleteComment(){
@@ -28,7 +27,7 @@ export function Comment({content, onDeleteComment}){
                             <time title="Publicado 10 de agosto as 11:56" dateTime='2022/08/10 11:56'>Cerca de 1h atrás</time>
                         </div>
                         <button onClick={handleDeleteComment} title='Deletar comentário'>
-                            <Trash size={20}/>
+                            <Trash size={24}/>
                         </button>
                     </header>
                     <p>{content}</p>
